@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private static final int snakeColor = Color.GREEN;
 
     // snake moving speed, max value = 1000
-    private static final int snakeSpeed = 850;
+    private static final int snakeSpeed = 500;
 
     // random points position
     private int positionX, positionY;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             public void onClick(View view) {
 
                 // check if previous moving position is not bottom, snake can't spin 180
-                if (movingPosition.equals("bottom")) {
+                if (!movingPosition.equals("bottom")) {
                     movingPosition = "top";
                 }
             }
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             @Override
             public void onClick(View view) {
 
-                if (movingPosition.equals("top")) {
+                if (!movingPosition.equals("top")) {
                     movingPosition = "bottom";
                 }
             }
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             @Override
             public void onClick(View view) {
 
-                if (movingPosition.equals("left")) {
+                if (!movingPosition.equals("left")) {
                     movingPosition = "right";
                 }
             }
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             @Override
             public void onClick(View view) {
 
-                if (movingPosition.equals("right")) {
+                if (!movingPosition.equals("right")) {
                     movingPosition = "left";
                 }
             }
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         score = 0;
 
         // set snake default moving position
-        movingPosition = "right";
+        movingPosition = "bottom";
 
         int startPositionX = (pointSize) * defaultTail;
 
