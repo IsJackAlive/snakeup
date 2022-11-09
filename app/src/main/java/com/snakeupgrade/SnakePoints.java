@@ -2,11 +2,11 @@ package com.snakeupgrade;
 
 public class SnakePoints {
 
-    private int positionX, getPositionY;
+    private int positionX, PositionY;
 
-    public SnakePoints(int positionX, int getPositionY) {
+    public SnakePoints(int positionX, int PositionY) {
         this.positionX = positionX;
-        this.getPositionY = getPositionY;
+        this.PositionY = PositionY;
     }
 
     public int getPositionX() {
@@ -17,11 +17,11 @@ public class SnakePoints {
         this.positionX = positionX;
     }
 
-    public int getGetPositionY() {
-        return getPositionY;
+    public int getPositionY() {
+        return PositionY;
     }
 
-    public void setGetPositionY(int getPositionY) {
-        this.getPositionY = getPositionY;
+    public void setPositionY(int PositionY) {
+        this.PositionY = PositionY;
     }
 }
