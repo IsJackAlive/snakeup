@@ -10,6 +10,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private SurfaceHolder surfaceHolder;
 
     // snake default moving position
-    private String movingPosition="right";
+    private String movingPosition = "right";
 
     private int score = 0;
 
@@ -146,10 +147,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
         int startPositionX = (pointSize) * defaultTail;
 
-        for (int i=0; i < defaultTail; i++) {
+        for (int i = 0; i < defaultTail; i++) {
 
             // add point
-            SnakePoints snakePoints =  new SnakePoints(startPositionX, pointSize);
+            SnakePoints snakePoints = new SnakePoints(startPositionX, pointSize);
             snakePointsList.add(snakePoints);
             startPositionX = startPositionX - pointSize * 2;
         }
@@ -195,22 +196,22 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 switch (movingPosition) {
                     case "right":
                         snakePointsList.get(0).setPositionX(headPositionX + pointSize * 2);
-                        snakePointsList.get(0). setPositionY(headPositionY);
+                        snakePointsList.get(0).setPositionY(headPositionY);
                         break;
 
                     case "left":
                         snakePointsList.get(0).setPositionX(headPositionX - pointSize * 2);
-                        snakePointsList.get(0). setPositionY(headPositionY);
+                        snakePointsList.get(0).setPositionY(headPositionY);
                         break;
 
                     case "top":
                         snakePointsList.get(0).setPositionX(headPositionX);
-                        snakePointsList.get(0). setPositionY(headPositionY - pointSize * 2);
+                        snakePointsList.get(0).setPositionY(headPositionY - pointSize * 2);
                         break;
 
                     case "bottom":
                         snakePointsList.get(0).setPositionX(headPositionX);
-                        snakePointsList.get(0). setPositionY(headPositionY + pointSize * 2);
+                        snakePointsList.get(0).setPositionY(headPositionY + pointSize * 2);
                         break;
                 }
 
@@ -241,8 +242,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                             builder.show();
                         }
                     });
-                }
-                else {
+                } else {
                     canvas = surfaceHolder.lockCanvas();
 
                     // clean canvas
@@ -305,14 +305,14 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         // check if snake touched edge
         if (snakePointsList.get(0).getPositionX() < 0 || snakePointsList.get(0).getPositionY() < 0 ||
                 snakePointsList.get(0).getPositionX() >= surfaceView.getWidth() ||
-                snakePointsList.get(0).getPositionY() >= surfaceView.getHeight() ) {
+                snakePointsList.get(0).getPositionY() >= surfaceView.getHeight()) {
             gameOver = true;
         }
         // check if snake touched tail
         else {
             for (int i = 0; i < snakePointsList.size(); i++) {
                 if (headPositionX == snakePointsList.get(i).getPositionX() &&
-                    headPositionY == snakePointsList.get(i).getPositionY()) {
+                        headPositionY == snakePointsList.get(i).getPositionY()) {
                     gameOver = true;
                     break;
                 }
