@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     // point color, snake tail
     private Paint pointColor = null;
 
+    private final List<Obstacle> obstacleList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,6 +160,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         // add random point on the screen
         addPoint();
 
+        // add random obstacle on the screen
+        addObstacle();
+
         // first move -> start game
         moveSnake();
     }
@@ -175,6 +180,24 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         positionY = (pointSize * randomYpos) + pointSize;
     }
 
+    private void addObstacle() {
+        int surfaceWidth = surfaceView.getWidth() - pointSize * 2;
+        int surfaceHeight = surfaceView.getHeight() - pointSize * 2;
+        int randomXpos = new Random().nextInt(surfaceWidth / pointSize);
+        int randomYpos = new Random().nextInt(surfaceHeight / pointSize);
+
+        if ((randomXpos % 2) != 0) randomXpos = randomXpos + 1;
+        if ((randomYpos % 2) != 0) randomYpos = randomYpos + 1;
+
+        if ((pointSize * randomXpos) + pointSize != positionX &&
+                (pointSize * randomYpos) + pointSize != positionY) {
+            Obstacle newObstacle = new Obstacle((pointSize * randomXpos) + pointSize, (pointSize * randomYpos) + pointSize);
+            obstacleList.add(newObstacle);
+        } else {
+            addObstacle();
+        }
+    }
+
     private void moveSnake() {
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -189,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 if (headPositionX == positionX && positionY == headPositionY) {
                     growSnake();
                     addPoint();
+                    addObstacle();
                 }
 
                 // check snake moving direction
@@ -215,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                         break;
                 }
 
-                // check does snake touched edge or itself
+                // check does snake touched edge, itself or obstacle
                 if (checkGameOver(headPositionX, headPositionY)) {
 
                     // stop timer, moving snake
@@ -255,6 +279,11 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
                     // draw random point
                     canvas.drawCircle(positionX, positionY, pointSize, createPointColor());
+
+                    // draw random obstacle
+                    for (Obstacle obstacle1 : obstacleList) {
+                        canvas.drawCircle(obstacle1.getPositionX(), obstacle1.getPositionY(), pointSize, obstacle1.createObstacle());
+                    }
 
                     // other points following snake's head
                     for (int i = 1; i < snakePointsList.size(); i++) {
@@ -318,6 +347,14 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 }
             }
         }
+        // check if snake touched obstacle
+        for (Obstacle obstacle : obstacleList) {
+            if (snakePointsList.get(0).getPositionX() == obstacle.getPositionX() &&
+                    snakePointsList.get(0).getPositionY() == obstacle.getPositionY()) {
+                gameOver = true;
+            }
+        }
+
         return gameOver;
     }
 
