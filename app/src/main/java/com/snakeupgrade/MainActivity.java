@@ -6,9 +6,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.transition.Scene;
+import android.transition.TransitionManager;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +22,7 @@ import androidx.appcompat.widget.AppCompatImageButton;
 
 import java.util.*;
 
-public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback {
+public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
     // list of snake points (snake length)
     private final List<SnakePoints> snakePointsList = new ArrayList<>();
@@ -138,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     private void init() {
         // clear snake points and set default score
+        obstacleList.clear();
         snakePointsList.clear();
         scoreTV.setText("0");
 
