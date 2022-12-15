@@ -22,6 +22,15 @@ import androidx.appcompat.widget.AppCompatImageButton;
 
 import java.util.*;
 
+/*
+TODO:
+- punkt pojawia się w przeszkodzie
+- przeszkody tworza sciany
+- zwiekszaj predkosc w trakcie gry
+- przyciski, grafika weza
+ */
+
+
 public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
     // list of snake points (snake length)
@@ -38,14 +47,14 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
     private int score = 0;
 
     // snake / point size
-    private static final int pointSize = 30;
+    private static final int pointSize = 40;
 
     // snake default tail
     private static final int defaultTail = 3;
     private static final int snakeColor = Color.GREEN;
 
     // snake moving speed, max value = 1000
-    private static final int snakeSpeed = 500;
+    private static final int snakeSpeed = 650;
 
     // random points position
     private int positionX, positionY;
