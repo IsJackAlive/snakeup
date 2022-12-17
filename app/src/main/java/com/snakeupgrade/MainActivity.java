@@ -41,7 +41,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
     private static final int POINT_SIZE = 40;
 
     // snake default tail
-    private static final int defaultTail = 3;
+    private static final int DEFAULT_TAIL = 3;
 
     // time to change snake position
     private Timer timer;
@@ -136,14 +136,14 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
     private void init() {
         // clear snake points and set default score
-        snake = new Snake(0, defaultTail, 650, List.of((POINT_SIZE) * defaultTail), List.of(POINT_SIZE));
+        snake = new Snake(0, DEFAULT_TAIL, 650, List.of((POINT_SIZE) * DEFAULT_TAIL), List.of(POINT_SIZE));
         obstacleList.clear();
         snakePointsList.clear();
         scoreTV.setText("0");
 
-        int startPositionX = (POINT_SIZE) * defaultTail;
+        int startPositionX = (POINT_SIZE) * DEFAULT_TAIL;
 
-        for (int i = 0; i < defaultTail; i++) {
+        for (int i = 0; i < DEFAULT_TAIL; i++) {
 
             // add point
             SnakePoints snakePoints = new SnakePoints(startPositionX, POINT_SIZE);

@@ -73,7 +73,7 @@ public class Snake{
     public Paint createSnake() {
         if (snakeColor == null) {
             snakeColor = new Paint();
-            snakeColor.setColor(Color.BLUE);
+            snakeColor.setColor(Color.GREEN);
             snakeColor.setStyle(Paint.Style.FILL);
             snakeColor.setAntiAlias(true);
         }
