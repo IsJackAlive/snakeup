@@ -3,21 +3,14 @@ package com.snakeupgrade;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.transition.Scene;
-import android.transition.TransitionManager;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 
 import java.util.*;
@@ -28,8 +21,8 @@ TODO:
 - przeszkody tworza sciany
 - zwiekszaj predkosc w trakcie gry
 - przyciski, grafika weza
+- Zakładka High Score do zapisu najlepszych wyników
  */
-
 
 public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
@@ -42,22 +35,13 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
     private SurfaceHolder surfaceHolder;
 
     // snake default moving position
-    private String movingPosition = "right";
-
-    private int score = 0;
+    private String movingPosition = "bottom";
 
     // snake / point size
-    private static final int pointSize = 40;
+    private static final int POINT_SIZE = 40;
 
     // snake default tail
     private static final int defaultTail = 3;
-    private static final int snakeColor = Color.GREEN;
-
-    // snake moving speed, max value = 1000
-    private static final int snakeSpeed = 650;
-
-    // random points position
-    private int positionX, positionY;
 
     // time to change snake position
     private Timer timer;
@@ -65,10 +49,11 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
     // canvas to draw snake and show on surface view
     private Canvas canvas = null;
 
-    // point color, snake tail
-    private Paint pointColor = null;
-
     private final List<Obstacle> obstacleList = new ArrayList<>();
+
+    private Point point;
+
+    private Snake snake;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,24 +136,19 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
     private void init() {
         // clear snake points and set default score
+        snake = new Snake(0, defaultTail, 650, List.of((POINT_SIZE) * defaultTail), List.of(POINT_SIZE));
         obstacleList.clear();
         snakePointsList.clear();
         scoreTV.setText("0");
 
-        // reset score
-        score = 0;
-
-        // set snake default moving position
-        movingPosition = "bottom";
-
-        int startPositionX = (pointSize) * defaultTail;
+        int startPositionX = (POINT_SIZE) * defaultTail;
 
         for (int i = 0; i < defaultTail; i++) {
 
             // add point
-            SnakePoints snakePoints = new SnakePoints(startPositionX, pointSize);
+            SnakePoints snakePoints = new SnakePoints(startPositionX, POINT_SIZE);
             snakePointsList.add(snakePoints);
-            startPositionX = startPositionX - pointSize * 2;
+            startPositionX = startPositionX - POINT_SIZE * 2;
         }
 
         // add random point on the screen
@@ -182,30 +162,32 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
     }
 
     private void addPoint() {
-        int surfaceWidth = surfaceView.getWidth() - pointSize * 2;
-        int surfaceHeight = surfaceView.getHeight() - pointSize * 2;
-        int randomXpos = new Random().nextInt(surfaceWidth / pointSize);
-        int randomYpos = new Random().nextInt(surfaceHeight / pointSize);
+        int surfaceWidth = surfaceView.getWidth() - POINT_SIZE * 2;
+        int surfaceHeight = surfaceView.getHeight() - POINT_SIZE * 2;
+        int randomXpos = new Random().nextInt(surfaceWidth / POINT_SIZE);
+        int randomYpos = new Random().nextInt(surfaceHeight / POINT_SIZE);
 
         if ((randomXpos % 2) != 0) randomXpos = randomXpos + 1;
         if ((randomYpos % 2) != 0) randomYpos = randomYpos + 1;
 
-        positionX = (pointSize * randomXpos) + pointSize;
-        positionY = (pointSize * randomYpos) + pointSize;
+        int positionX = (POINT_SIZE * randomXpos) + POINT_SIZE;
+        int positionY = (POINT_SIZE * randomYpos) + POINT_SIZE;
+
+        point = new Point(positionX, positionY);
     }
 
     private void addObstacle() {
-        int surfaceWidth = surfaceView.getWidth() - pointSize * 2;
-        int surfaceHeight = surfaceView.getHeight() - pointSize * 2;
-        int randomXpos = new Random().nextInt(surfaceWidth / pointSize);
-        int randomYpos = new Random().nextInt(surfaceHeight / pointSize);
+        int surfaceWidth = surfaceView.getWidth() - POINT_SIZE * 2;
+        int surfaceHeight = surfaceView.getHeight() - POINT_SIZE * 2;
+        int randomXpos = new Random().nextInt(surfaceWidth / POINT_SIZE);
+        int randomYpos = new Random().nextInt(surfaceHeight / POINT_SIZE);
 
         if ((randomXpos % 2) != 0) randomXpos = randomXpos + 1;
         if ((randomYpos % 2) != 0) randomYpos = randomYpos + 1;
 
-        if ((pointSize * randomXpos) + pointSize != positionX &&
-                (pointSize * randomYpos) + pointSize != positionY) {
-            Obstacle newObstacle = new Obstacle((pointSize * randomXpos) + pointSize, (pointSize * randomYpos) + pointSize);
+        if ((POINT_SIZE * randomXpos) + POINT_SIZE != point.getPositionX() &&
+                (POINT_SIZE * randomYpos) + POINT_SIZE != point.getPositionY()) {
+            Obstacle newObstacle = new Obstacle((POINT_SIZE * randomXpos) + POINT_SIZE, (POINT_SIZE * randomYpos) + POINT_SIZE);
             obstacleList.add(newObstacle);
         } else {
             addObstacle();
@@ -223,7 +205,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
                 int headPositionY = snakePointsList.get(0).getPositionY();
 
                 // check if snake get a point
-                if (headPositionX == positionX && positionY == headPositionY) {
+                if (headPositionX == point.getPositionX() && point.getPositionY() == headPositionY) {
                     growSnake();
                     addPoint();
                     addObstacle();
@@ -233,23 +215,23 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
                 // other points follow snake's head
                 switch (movingPosition) {
                     case "right":
-                        snakePointsList.get(0).setPositionX(headPositionX + pointSize * 2);
+                        snakePointsList.get(0).setPositionX(headPositionX + POINT_SIZE * 2);
                         snakePointsList.get(0).setPositionY(headPositionY);
                         break;
 
                     case "left":
-                        snakePointsList.get(0).setPositionX(headPositionX - pointSize * 2);
+                        snakePointsList.get(0).setPositionX(headPositionX - POINT_SIZE * 2);
                         snakePointsList.get(0).setPositionY(headPositionY);
                         break;
 
                     case "top":
                         snakePointsList.get(0).setPositionX(headPositionX);
-                        snakePointsList.get(0).setPositionY(headPositionY - pointSize * 2);
+                        snakePointsList.get(0).setPositionY(headPositionY - POINT_SIZE * 2);
                         break;
 
                     case "bottom":
                         snakePointsList.get(0).setPositionX(headPositionX);
-                        snakePointsList.get(0).setPositionY(headPositionY + pointSize * 2);
+                        snakePointsList.get(0).setPositionY(headPositionY + POINT_SIZE * 2);
                         break;
                 }
 
@@ -262,7 +244,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
                     // show game over alert
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Your Score = " + score);
+                    builder.setMessage("Your Score = " + snake.getScore());
                     builder.setTitle("Game Over");
                     builder.setCancelable(false);
                     builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
@@ -289,14 +271,14 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
                     canvas.drawCircle(
                             snakePointsList.get(0).getPositionX(),
                             snakePointsList.get(0).getPositionY(),
-                            pointSize, createPointColor());
+                            POINT_SIZE, point.createPoint());
 
                     // draw random point
-                    canvas.drawCircle(positionX, positionY, pointSize, createPointColor());
+                    canvas.drawCircle(point.getPositionX(), point.getPositionY(), POINT_SIZE, point.getPointColor());
 
                     // draw random obstacle
                     for (Obstacle obstacle1 : obstacleList) {
-                        canvas.drawCircle(obstacle1.getPositionX(), obstacle1.getPositionY(), pointSize, obstacle1.createObstacle());
+                        canvas.drawCircle(obstacle1.getPositionX(), obstacle1.getPositionY(), POINT_SIZE, obstacle1.createObstacle());
                     }
 
                     // other points following snake's head
@@ -309,7 +291,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
                         canvas.drawCircle(
                                 snakePointsList.get(i).getPositionX(),
                                 snakePointsList.get(i).getPositionY(),
-                                pointSize, createPointColor());
+                                POINT_SIZE, snake.createSnake());
 
                         headPositionX = getTempPositionX;
                         headPositionY = getTempPositionY;
@@ -319,7 +301,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
-        }, 1000 - snakeSpeed, 1000 - snakeSpeed);
+        }, 1000 - snake.getSnakeSpeed(), 1000 - snake.getSnakeSpeed());
     }
 
     private void growSnake() {
@@ -331,13 +313,13 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
         snakePointsList.add(snakePoints);
 
         // increase score
-        score++;
+        snake.setScore(snake.getScore() + 1);
 
         // show score
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                scoreTV.setText(String.valueOf(score));
+                scoreTV.setText(String.valueOf(snake.getScore()));
             }
         });
     }
@@ -370,15 +352,5 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
         }
 
         return gameOver;
-    }
-
-    private Paint createPointColor() {
-        if (pointColor == null) {
-            pointColor = new Paint();
-            pointColor.setColor(snakeColor);
-            pointColor.setStyle(Paint.Style.FILL);
-            pointColor.setAntiAlias(true);
-        }
-        return pointColor;
     }
 }
