@@ -1,8 +1,11 @@
 package com.snakeupgrade;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -64,6 +67,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
     private Paint pointColor = null;
 
     private final List<Obstacle> obstacleList = new ArrayList<>();
+    public int canvasBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +153,10 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
         obstacleList.clear();
         snakePointsList.clear();
         scoreTV.setText("0");
+        canvas = surfaceHolder.lockCanvas();
+        changeBackground();
+        canvas.drawColor(canvasBackground);
+        surfaceHolder.unlockCanvasAndPost(canvas);
 
         // reset score
         score = 0;
@@ -174,6 +182,29 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
         // first move -> start game
         moveSnake();
+    }
+
+    private void changeBackground(){
+        switch (new Random().nextInt(6)){
+            case 0:
+                canvasBackground = Color.BLUE;
+                break;
+            case 1:
+                canvasBackground = Color.BLACK;
+                break;
+            case 2:
+                canvasBackground = Color.WHITE;
+                break;
+            case 3:
+                canvasBackground = Color.YELLOW;
+                break;
+            case 4:
+                canvasBackground = Color.MAGENTA;
+                break;
+            case 5:
+                canvasBackground = Color.CYAN;
+                break;
+        }
     }
 
     private void addPoint() {
@@ -285,6 +316,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
                     // clean canvas
                     canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);
+                    canvas.drawColor(canvasBackground);
 
                     canvas.drawCircle(
                             snakePointsList.get(0).getPositionX(),
