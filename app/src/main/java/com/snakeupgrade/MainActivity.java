@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -68,6 +67,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
     private final List<Obstacle> obstacleList = new ArrayList<>();
     public int canvasBackground;
+    public Bitmap original;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,8 +154,10 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
         snakePointsList.clear();
         scoreTV.setText("0");
         canvas = surfaceHolder.lockCanvas();
+//        changeBackgroundColor();
         changeBackground();
-        canvas.drawColor(canvasBackground);
+//        canvas.drawColor(canvasBackground);
+        canvas.drawBitmap(original, 0, 0, null);
         surfaceHolder.unlockCanvasAndPost(canvas);
 
         // reset score
@@ -184,8 +186,8 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
         moveSnake();
     }
 
-    private void changeBackground(){
-        switch (new Random().nextInt(6)){
+    private void changeBackgroundColor() {
+        switch (new Random().nextInt(6)) {
             case 0:
                 canvasBackground = Color.BLUE;
                 break;
@@ -203,6 +205,29 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
                 break;
             case 5:
                 canvasBackground = Color.CYAN;
+                break;
+        }
+    }
+
+    private void changeBackground() {
+        switch (new Random().nextInt(6)) {
+            case 0:
+                original = BitmapFactory.decodeResource(getResources(), R.drawable.sand_small);
+                break;
+            case 1:
+                original = BitmapFactory.decodeResource(getResources(), R.drawable.rain_small);
+                break;
+            case 2:
+                original = BitmapFactory.decodeResource(getResources(), R.drawable.moon_small);
+                break;
+            case 3:
+                original = BitmapFactory.decodeResource(getResources(), R.drawable.ground_small);
+                break;
+            case 4:
+                original = BitmapFactory.decodeResource(getResources(), R.drawable.grass_small);
+                break;
+            case 5:
+                original = BitmapFactory.decodeResource(getResources(), R.drawable.desert_small);
                 break;
         }
     }
@@ -316,7 +341,9 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
                     // clean canvas
                     canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);
-                    canvas.drawColor(canvasBackground);
+//                    surfaceView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    canvas.drawBitmap(original, 0, 0, null);
+//                    canvas.drawColor(canvasBackground);
 
                     canvas.drawCircle(
                             snakePointsList.get(0).getPositionX(),
