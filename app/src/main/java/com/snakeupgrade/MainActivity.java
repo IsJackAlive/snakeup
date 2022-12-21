@@ -21,7 +21,7 @@ import java.util.*;
 
 /*
 TODO:
-- punkt pojawia się w przeszkodzie
+- punkt pojawia się w przeszkodzie - Już nie powinny, ale chyba się zdarza
 - przeszkody tworza sciany
 - zwiekszaj predkosc w trakcie gry
 - przyciski, grafika weza
@@ -62,11 +62,8 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
     // canvas to draw snake and show on surface view
     private Canvas canvas = null;
 
-    // point color, snake tail
-    private Paint pointColor = null;
-
     private final List<Obstacle> obstacleList = new ArrayList<>();
-    public int canvasBackground;
+
     public Bitmap original;
 
     @Override
@@ -154,9 +151,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
         snakePointsList.clear();
         scoreTV.setText("0");
         canvas = surfaceHolder.lockCanvas();
-//        changeBackgroundColor();
         changeBackground();
-//        canvas.drawColor(canvasBackground);
         canvas.drawBitmap(original, 0, 0, null);
         surfaceHolder.unlockCanvasAndPost(canvas);
 
@@ -184,29 +179,6 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
         // first move -> start game
         moveSnake();
-    }
-
-    private void changeBackgroundColor() {
-        switch (new Random().nextInt(6)) {
-            case 0:
-                canvasBackground = Color.BLUE;
-                break;
-            case 1:
-                canvasBackground = Color.BLACK;
-                break;
-            case 2:
-                canvasBackground = Color.WHITE;
-                break;
-            case 3:
-                canvasBackground = Color.YELLOW;
-                break;
-            case 4:
-                canvasBackground = Color.MAGENTA;
-                break;
-            case 5:
-                canvasBackground = Color.CYAN;
-                break;
-        }
     }
 
     private void changeBackground() {
@@ -341,21 +313,23 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
                     // clean canvas
                     canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);
-//                    surfaceView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                     canvas.drawBitmap(original, 0, 0, null);
-//                    canvas.drawColor(canvasBackground);
 
-                    canvas.drawCircle(
-                            snakePointsList.get(0).getPositionX(),
-                            snakePointsList.get(0).getPositionY(),
-                            POINT_SIZE, createPointColor());
+                    Bitmap snakeHead = BitmapFactory.decodeResource(getResources(), R.drawable.head30);
+                    Bitmap snakeTail = BitmapFactory.decodeResource(getResources(), R.drawable.snake30);
+                    Bitmap redApple = BitmapFactory.decodeResource(getResources(), R.drawable.applered30);
+                    Bitmap greenApple = BitmapFactory.decodeResource(getResources(), R.drawable.applegreen30);
 
+                    canvas.drawBitmap(snakeHead, snakePointsList.get(0).getPositionX() - POINT_SIZE,
+                            snakePointsList.get(0).getPositionY() - POINT_SIZE, null);
                     // draw random point
-                    canvas.drawCircle(pointPositionX, pointPositionY, POINT_SIZE, createPointColor());
+                    canvas.drawBitmap(greenApple, pointPositionX - POINT_SIZE,
+                            pointPositionY - POINT_SIZE, null);
 
                     // draw random obstacle
                     for (Obstacle obstacle1 : obstacleList) {
-                        canvas.drawCircle(obstacle1.getPositionX(), obstacle1.getPositionY(), POINT_SIZE, obstacle1.createObstacle());
+                        canvas.drawBitmap(redApple, obstacle1.getPositionX() - POINT_SIZE,
+                                obstacle1.getPositionY() - POINT_SIZE, null);
                     }
 
                     // other points following snake's head
@@ -365,10 +339,9 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
                         snakePointsList.get(i).setPositionX(headPositionX);
                         snakePointsList.get(i).setPositionY(headPositionY);
-                        canvas.drawCircle(
-                                snakePointsList.get(i).getPositionX(),
-                                snakePointsList.get(i).getPositionY(),
-                                POINT_SIZE, createPointColor());
+
+                        canvas.drawBitmap(snakeTail, snakePointsList.get(i).getPositionX() - POINT_SIZE,
+                                snakePointsList.get(i).getPositionY() - POINT_SIZE, null);
 
                         headPositionX = getTempPositionX;
                         headPositionY = getTempPositionY;
@@ -429,15 +402,5 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
         }
 
         return gameOver;
-    }
-
-    private Paint createPointColor() {
-        if (pointColor == null) {
-            pointColor = new Paint();
-            pointColor.setColor(SNAKE_COLOR);
-            pointColor.setStyle(Paint.Style.FILL);
-            pointColor.setAntiAlias(true);
-        }
-        return pointColor;
     }
 }
