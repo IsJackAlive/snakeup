@@ -1,11 +1,12 @@
 package com.snakeupgrade;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
@@ -17,7 +18,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /*
 TODO:
@@ -30,6 +35,7 @@ TODO:
 
 public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
+    public static final String GAME_PREFS = "prefs";
     // list of snake points (snake length)
     private final List<SnakePoints> snakePointsList = new ArrayList<>();
     private SurfaceView surfaceView;
@@ -65,6 +71,8 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
     private final List<Obstacle> obstacleList = new ArrayList<>();
 
     public Bitmap original;
+
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,11 +296,23 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
                     timer.purge();
                     timer.cancel();
 
+                    SharedPreferences settings = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
+                    int highScore = settings.getInt("HIGH_SCORE", 0);
+
+                    if (score > highScore){
+                        /*Save*/
+                        highScore = score;
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putInt("HIGH_SCORE", score);
+                        editor.commit();
+                    }
+
                     // show game over alert
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Your Score = " + score);
+                    builder.setMessage("Your Score = " + score +"\n"+"High Score = " + highScore);
                     builder.setTitle("Game Over");
                     builder.setCancelable(false);
+
                     builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -351,6 +371,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
+
         }, 1000 - SNAKE_SPEED, 1000 - SNAKE_SPEED);
     }
 
