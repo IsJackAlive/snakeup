@@ -26,13 +26,13 @@ public class Menu extends AppCompatActivity {
 
         Button next3 = findViewById(R.id.button3);
         next3.setOnClickListener(view -> {
-            Intent myIntent = new Intent(view.getContext(), MainActivity.class);
+            Intent myIntent = new Intent(view.getContext(), HighScore.class);
             startActivity(myIntent);
         });
 
         Button next4 = findViewById(R.id.button4);
         next4.setOnClickListener(view -> {
-            Intent myIntent = new Intent(view.getContext(), MainActivity.class);
+            Intent myIntent = new Intent(view.getContext(), About.class);
             startActivity(myIntent);
         });
     }
