@@ -7,13 +7,36 @@ import java.util.List;
 
 public class Snake {
     private int speed = 650;
-    private int tail = 3;
+    private int tail;
     private int color = Color.GREEN;
-    private int[] snakeHead = {0, 0};
+    private int snakeHeadX, snakeHeadY;
+
     private static final int POINT_SIZE = 40;
     private List<SnakePoints> points = new ArrayList<>();
 
-    public Snake() {}
+    public Snake() {
+    }
+
+    public Snake(int snakeHeadX, int snakeHeadY) {
+        this.snakeHeadX = snakeHeadX;
+        this.snakeHeadY = snakeHeadY;
+    }
+
+    public int getSnakeHeadX() {
+        return snakeHeadX;
+    }
+
+    public void setSnakeHeadX(int snakeHeadX) {
+        this.snakeHeadX = snakeHeadX;
+    }
+
+    public int getSnakeHeadY() {
+        return snakeHeadY;
+    }
+
+    public void setSnakeHeadY(int snakeHeadY) {
+        this.snakeHeadY = snakeHeadY;
+    }
 
     public int getSpeed() {
         return speed;
@@ -39,19 +62,15 @@ public class Snake {
         this.color = color;
     }
 
-    public int[] getSnakeHead() {
-        return snakeHead;
-    }
-
-    public void setSnakeHead(int[] snakeHead) {
-        this.snakeHead = snakeHead;
-    }
-
     public List<SnakePoints> getPoints() {
         return points;
     }
 
     public void setPoints(List<SnakePoints> points) {
         this.points = points;
+    }
+
+    public void addPoint(SnakePoints sp) {
+        points.add(sp);
     }
 }

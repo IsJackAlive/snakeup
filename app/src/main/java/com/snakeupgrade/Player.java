@@ -13,7 +13,7 @@ TODO:
     - smierc 1 gracza nie konczy gry 2giemu
 */
 
-public class Player {
+public class Player extends Snake {
 
     // [0] width    [1] height
     private int[] surface;
@@ -21,36 +21,22 @@ public class Player {
     private List<SnakePoints> snakePointsList = new ArrayList<>();
     private String movingPosition = "bottom";
     private int score = 0;
-    private int SNAKE_COLOR;
-    private int SNAKE_SPEED = 650;
-    private int DEFAULT_TAIL = 3;
-    private int[] snakeHead = {0, 0};
-    private int[][] pointPos = { {0}, {0} };
-    private int[][] obstaclePos = { {0}, {0} };
+    private int[][] pointPos = {{0}, {0}};
+    private int[][] obstaclePos = {{0}, {0}};
     private boolean alive = true;
 
     public Player(int[] surface) {
         this.surface = surface;
         this.movingPosition = movingPosition;
-        SNAKE_COLOR = Color.GREEN;
     }
 
-    public Player(int[] surface, String movingPosition, int SNAKE_COLOR) {
+    public Player(int[] surface, String movingPosition) {
         this.surface = surface;
         this.movingPosition = movingPosition;
-        this.SNAKE_COLOR = SNAKE_COLOR;
-    }
-
-    public int getTail() {
-        return DEFAULT_TAIL;
     }
 
     public int getScore() {
         return score;
-    }
-
-    public int[] getSnakeHead() {
-        return snakeHead;
     }
 
     public void setPointPos(int[][] pointPos) {
@@ -65,46 +51,77 @@ public class Player {
         return alive;
     }
 
-    private void moveSnake() {
+    int tail = 3;
+    int startX = (POINT_SIZE) * tail;
+    Snake snake = new Snake(startX, POINT_SIZE);
 
-                snakeHead[0] = snakePointsList.get(0).getPositionX();
-                snakeHead[1] = snakePointsList.get(0).getPositionY();
+    public void playerInit() {
 
-                // check snake moving direction
-                // other points follow snake's head
-                switch (movingPosition) {
-                    case "right":
-                        snakePointsList.get(0).setPositionX(snakeHead[0] + POINT_SIZE * 2);
-                        snakePointsList.get(0).setPositionY(snakeHead[1]);
-                        break;
+        for (int i = 0; i < tail; i++) {
 
-                    case "left":
-                        snakePointsList.get(0).setPositionX(snakeHead[0] - POINT_SIZE * 2);
-                        snakePointsList.get(0).setPositionY(snakeHead[1]);
-                        break;
-
-                    case "top":
-                        snakePointsList.get(0).setPositionX(snakeHead[0]);
-                        snakePointsList.get(0).setPositionY(snakeHead[1] - POINT_SIZE * 2);
-                        break;
-
-                    case "bottom":
-                        snakePointsList.get(0).setPositionX(snakeHead[0]);
-                        snakePointsList.get(0).setPositionY(snakeHead[1] + POINT_SIZE * 2);
-                        break;
-                }
-
-                // check does snake touched edge, itself or obstacle
-                if (checkGameOver(snakeHead[0], snakeHead[1])) {
-
-                    // if multiplayer mode continue game and delete player
-                    alive = false;
-                } else {
-
-                }
+            SnakePoints snakePoints = new SnakePoints(startX, POINT_SIZE);
+            snake.addPoint(snakePoints);
+            startX = startX - POINT_SIZE * 2;
+        }
     }
 
-    private void growSnake() {
+    public void moveSnake() {
+
+        // get head position
+        snake.setSnakeHeadX(snakePointsList.get(0).getPositionX());
+        snake.setSnakeHeadY(snakePointsList.get(0).getPositionY());
+
+        // check snake moving direction
+        // other points follow snake's head
+        switch (movingPosition) {
+            case "right":
+                snakePointsList.get(0).setPositionX(snake.getSnakeHeadX() + POINT_SIZE * 2);
+                snakePointsList.get(0).setPositionY(snake.getSnakeHeadY());
+                break;
+
+            case "left":
+                snakePointsList.get(0).setPositionX(snake.getSnakeHeadX() - POINT_SIZE * 2);
+                snakePointsList.get(0).setPositionY(snake.getSnakeHeadY());
+                break;
+
+            case "top":
+                snakePointsList.get(0).setPositionX(snake.getSnakeHeadX());
+                snakePointsList.get(0).setPositionY(snake.getSnakeHeadY() - POINT_SIZE * 2);
+                break;
+
+            case "bottom":
+                snakePointsList.get(0).setPositionX(snake.getSnakeHeadX());
+                snakePointsList.get(0).setPositionY(snake.getSnakeHeadY() + POINT_SIZE * 2);
+                break;
+        }
+
+        // check does snake touched edge, itself or obstacle
+        if (checkGameOver(snake.getSnakeHeadX(), snake.getSnakeHeadY())) {
+
+            // if multiplayer mode continue game and delete player
+            alive = false;
+
+        } else {
+
+            // Mozliwe ze to powinno byc w GameEvenst
+            // other points following snake's head
+            for (int i = 1; i < snakePointsList.size(); i++) {
+                int getTempPositionX = snakePointsList.get(i).getPositionX();
+                int getTempPositionY = snakePointsList.get(i).getPositionY();
+
+                snakePointsList.get(i).setPositionX(snake.getSnakeHeadX());
+                snakePointsList.get(i).setPositionY(snake.getSnakeHeadX());
+
+//                canvas.drawBitmap(snakeTail, snakePointsList.get(i).getPositionX() - POINT_SIZE,
+//                        snakePointsList.get(i).getPositionY() - POINT_SIZE, null);
+//
+                snake.setSnakeHeadX(getTempPositionX);
+                snake.setSnakeHeadY(getTempPositionY);
+            }
+        }
+    }
+
+    public void growSnake() {
 
         // create new snake point
         SnakePoints snakePoints = new SnakePoints(0, 0);

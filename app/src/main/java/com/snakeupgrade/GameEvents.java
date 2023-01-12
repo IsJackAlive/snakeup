@@ -3,6 +3,8 @@ package com.snakeupgrade;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /*
 TODO:
@@ -13,10 +15,11 @@ TODO:
 public class GameEvents {
 
     // [0] width X    [1] height Y
-    private int[] surface = {0,0};
-    private int[] pointPos = {0,0};
+    private int[] surface = {0, 0};
+    private int[] pointPos = {0, 0};
     private static final int POINT_SIZE = 40;
     private final List<Obstacle> obstacleList = new ArrayList<>();
+    private Timer timer;
 
     private void addPoint() {
         int surfaceWidth = surface[0] - POINT_SIZE * 2;
@@ -47,29 +50,42 @@ public class GameEvents {
 
         if ((POINT_SIZE * randomXpos) + POINT_SIZE != pointPos[0] &&
                 (POINT_SIZE * randomYpos) + POINT_SIZE != pointPos[1]) {
-            Obstacle newObstacle = new Obstacle((POINT_SIZE * randomXpos) + POINT_SIZE, (POINT_SIZE * randomYpos) + POINT_SIZE);
+
+            Obstacle newObstacle = new Obstacle((POINT_SIZE * randomXpos) + POINT_SIZE,
+                    (POINT_SIZE * randomYpos) + POINT_SIZE);
             obstacleList.add(newObstacle);
+
         } else {
             addObstacle();
         }
     }
 
-    private void gameInit () {
+    private void gamePlay(Player player) {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+
+                // first move -> start game
+                player.moveSnake();
+            }
+
+        }, 1000 - player.getSpeed(), 1000 - player.getSpeed());
+    }
+
+    public void gameInit() {
         // clear snake points and set default score
         obstacleList.clear();
 
         Player player = new Player(surface);
+        player.playerInit();
 
-        int startPositionX = (POINT_SIZE) * player.getTail();
+        // add random point on the screen
+        addPoint();
 
-        for (int i = 0; i < player.getTail(); i++) {
+        // add random obstacle on the screen
+        addObstacle();
 
-            // add point
-            SnakePoints snakePoints = new SnakePoints(startPositionX, POINT_SIZE);
-//            snakePointsList.add(snakePoints);
-
-            startPositionX = startPositionX - POINT_SIZE * 2;
-        }
-
+        gamePlay(player);
     }
 }
