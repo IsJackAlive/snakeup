@@ -14,7 +14,7 @@ public class Menu extends AppCompatActivity {
 
         Button next = findViewById(R.id.button);
         next.setOnClickListener(view -> {
-            Intent myIntent = new Intent(view.getContext(), MainActivity.class);
+            Intent myIntent = new Intent(view.getContext(), GameEvents.class);
             startActivity(myIntent);
         });
 

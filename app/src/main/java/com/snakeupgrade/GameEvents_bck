@@ -1,14 +1,11 @@
 package com.snakeupgrade;
 
 import android.graphics.*;
-import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,33 +19,42 @@ TODO:
 - Pozycje przeszkód
 - Pozycje punktów
 */
-public class GameEvents extends Menu implements SurfaceHolder.Callback {
+public class GameEvents extends AppCompatActivity {
 
     // [0] width X    [1] height Y
-//    private int[] surface = {100, 200};
+    private int[] surface = {0, 0};
     private int[] pointPos = {0, 0};
     private static final int POINT_SIZE = 40;
     private List<Obstacle> obstacleList = new ArrayList<>();
     private Timer timer;
 
-    // idk v v v
+    //idk
     private SurfaceView surfaceView;
     private TextView scoreTV;
+
+    // surface holder to draw snake on surface's canvas
     private SurfaceHolder surfaceHolder;
+
+    // canvas to draw snake and show on surface view
     private Canvas canvas;
+
     public Bitmap original;
 
-    // TODO: ISSUE!!!
-    //    Player player = new Player(surfaceView);
-    Player player = new Player();
+    private TextView debugTxtApp;
 
-    public GameEvents() {
+    public GameEvents(SurfaceView surfaceView, TextView scoreTV, SurfaceHolder surfaceHolder, Canvas canvas) {
+        this.surfaceView = surfaceView;
+        this.scoreTV = scoreTV;
+        this.surfaceHolder = surfaceHolder;
+        this.canvas = canvas;
     }
-    // idk ^ ^ ^
+//    private Context context;
+
+    //
 
     private void addPoint(Player player) {
-        int surfaceWidth = surfaceView.getWidth() - POINT_SIZE * 2;
-        int surfaceHeight = surfaceView.getHeight() - POINT_SIZE * 2;
+        int surfaceWidth = surface[0] - POINT_SIZE * 2;
+        int surfaceHeight = surface[1] - POINT_SIZE * 2;
         int randomXpos = new Random().nextInt(surfaceWidth / POINT_SIZE);
         int randomYpos = new Random().nextInt(surfaceHeight / POINT_SIZE);
 
@@ -76,8 +82,8 @@ public class GameEvents extends Menu implements SurfaceHolder.Callback {
     }
 
     private void addObstacle() {
-        int surfaceWidth = surfaceView.getWidth() - POINT_SIZE * 2;
-        int surfaceHeight = surfaceView.getHeight() - POINT_SIZE * 2;
+        int surfaceWidth = surface[0] - POINT_SIZE * 2;
+        int surfaceHeight = surface[1] - POINT_SIZE * 2;
         int randomXpos = new Random().nextInt(surfaceWidth / POINT_SIZE);
         int randomYpos = new Random().nextInt(surfaceHeight / POINT_SIZE);
 
@@ -174,12 +180,7 @@ public class GameEvents extends Menu implements SurfaceHolder.Callback {
         // clear snake points and set default score
         obstacleList.clear();
 
-        scoreTV.setText("GameEvent init");
-        canvas = surfaceHolder.lockCanvas();
-        canvas.drawBitmap(original, 0, 0, null);
-        surfaceHolder.unlockCanvasAndPost(canvas);
-
-//        Player player = new Player(surface);
+        Player player = new Player(surface);
         player.playerInit();
 
         // add random point on the screen
@@ -191,74 +192,4 @@ public class GameEvents extends Menu implements SurfaceHolder.Callback {
         gamePlay(player);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        surfaceView = findViewById(R.id.surfaceView);
-        scoreTV = findViewById(R.id.scoreTV);
-
-        final AppCompatImageButton topBtn = findViewById(R.id.topBtn);
-        final AppCompatImageButton bottomBtn = findViewById(R.id.bottomBtn);
-        final AppCompatImageButton rightBtn = findViewById(R.id.rightBtn);
-        final AppCompatImageButton leftBtn = findViewById(R.id.leftBtn);
-
-        surfaceView.getHolder().addCallback(this);
-        topBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // check if previous moving position is not bottom, snake can't spin 180
-                if (!player.getMovingPosition().equals("bottom")) {
-                    player.setMovingPosition("top");
-                }
-            }
-        });
-
-        bottomBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!player.getMovingPosition().equals("top")) {
-                    player.setMovingPosition("bottom");
-                }
-            }
-        });
-
-        rightBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!player.getMovingPosition().equals("left")) {
-                    player.setMovingPosition("right");
-                }
-            }
-        });
-
-        leftBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!player.getMovingPosition().equals("right")) {
-                    player.setMovingPosition("left");
-                }
-            }
-        });
-    }
-
-    @Override
-    public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        gameInit();
-    }
-
-    @Override
-    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-
-    }
 }

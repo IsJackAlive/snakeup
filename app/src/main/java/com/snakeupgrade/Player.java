@@ -2,6 +2,7 @@ package com.snakeupgrade;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.view.SurfaceView;
 
 import java.util.*;
 
@@ -27,20 +28,33 @@ public class Player extends Snake {
     private boolean alive = true;
 
     //
-    private Canvas canvas;
+    private SurfaceView surfaceView;
 
-    public void setCanvas(Canvas canvas) {
-        this.canvas = canvas;
+    public Player() {
     }
-//
+
+    public Player(SurfaceView surfaceView) {
+        this.surfaceView = surfaceView;
+
+        surface[0] = surfaceView.getWidth();
+        surface[1] = surfaceView.getHeight();
+    }
+    //
 
     public Player(int[] surface) {
         this.surface = surface;
-        this.movingPosition = movingPosition;
     }
 
     public Player(int[] surface, String movingPosition) {
         this.surface = surface;
+        this.movingPosition = movingPosition;
+    }
+
+    public String getMovingPosition() {
+        return movingPosition;
+    }
+
+    public void setMovingPosition(String movingPosition) {
         this.movingPosition = movingPosition;
     }
 
@@ -120,7 +134,7 @@ public class Player extends Snake {
 
                 snakePointsList.get(i).setPositionX(snake.getSnakeHeadX());
                 snakePointsList.get(i).setPositionY(snake.getSnakeHeadX());
-                
+
                 snake.setSnakeHeadX(getTempPositionX);
                 snake.setSnakeHeadY(getTempPositionY);
             }

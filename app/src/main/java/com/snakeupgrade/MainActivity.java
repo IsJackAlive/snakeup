@@ -155,14 +155,14 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
     }
 
     private void init() {
-//        scoreTV.setText("0");
+        scoreTV.setText("Main init");
 //        canvas = surfaceHolder.lockCanvas();
 //        changeBackground();
 //        canvas.drawBitmap(original, 0, 0, null);
 //        surfaceHolder.unlockCanvasAndPost(canvas);
 
-        GameEvents gameEvents = new GameEvents(surfaceView, scoreTV, surfaceHolder, canvas);
-        gameEvents.gameInit();
+//        GameEvents gameEvents = new GameEvents(surfaceView, scoreTV, surfaceHolder, canvas);
+//        gameEvents.gameInit();
 
     }
 
