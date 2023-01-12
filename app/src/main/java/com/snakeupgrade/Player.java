@@ -1,5 +1,6 @@
 package com.snakeupgrade;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 
 import java.util.*;
@@ -24,6 +25,14 @@ public class Player extends Snake {
     private int[][] pointPos = {{0}, {0}};
     private int[][] obstaclePos = {{0}, {0}};
     private boolean alive = true;
+
+    //
+    private Canvas canvas;
+
+    public void setCanvas(Canvas canvas) {
+        this.canvas = canvas;
+    }
+//
 
     public Player(int[] surface) {
         this.surface = surface;
@@ -111,10 +120,7 @@ public class Player extends Snake {
 
                 snakePointsList.get(i).setPositionX(snake.getSnakeHeadX());
                 snakePointsList.get(i).setPositionY(snake.getSnakeHeadX());
-
-//                canvas.drawBitmap(snakeTail, snakePointsList.get(i).getPositionX() - POINT_SIZE,
-//                        snakePointsList.get(i).getPositionY() - POINT_SIZE, null);
-//
+                
                 snake.setSnakeHeadX(getTempPositionX);
                 snake.setSnakeHeadY(getTempPositionY);
             }
