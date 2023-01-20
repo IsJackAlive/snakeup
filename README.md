@@ -1,6 +1,9 @@
-# snakeup
-snake multiplayer
+# snake upgrade
+Game is designed for fans of the Snake game. The application offers variety and unpredictability that makes the gameplay challenging for the user.
 
-SDK: corretto-11 Amazon Corretto version 11
+<img src=".readme-files/1.png" height="300" />
+<img src=".readme-files/3.png" height="300" />
+<img src=".readme-files/6.png" height="300" />
 
-![My Image](images/snakeup_gameplay.jpeg)
+<img src=".readme-files/7.png" height="300" />
+<img src=".readme-files/8.png" height="300" />
