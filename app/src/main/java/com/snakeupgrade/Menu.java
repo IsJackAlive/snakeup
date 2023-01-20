@@ -10,16 +10,10 @@ public class Menu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu);
+        setContentView(R.layout.menu2);
 
         Button next = findViewById(R.id.button);
         next.setOnClickListener(view -> {
-            Intent myIntent = new Intent(view.getContext(), MainActivity.class);
-            startActivity(myIntent);
-        });
-
-        Button next2 = findViewById(R.id.button2);
-        next2.setOnClickListener(view -> {
             Intent myIntent = new Intent(view.getContext(), MainActivity.class);
             startActivity(myIntent);
         });

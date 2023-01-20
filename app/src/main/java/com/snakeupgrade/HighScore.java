@@ -14,25 +14,25 @@ public class HighScore extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.high_score);
 
-//        TextView scoreLabel = (TextView) findViewById(R.id.editTextNumber12);
-//        TextView highScoreLabel = (TextView) findViewById(R.id.editTextNumber13);
-//
+        TextView scoreLabel = (TextView) findViewById(R.id.editTextNumber12);
+        TextView highScoreLabel = (TextView) findViewById(R.id.editTextNumber13);
+
 //        int score = getIntent().getIntExtra("SCORE", 0);
-//        scoreLabel.setText(score+"");
+//        scoreLabel.setText(score + "");
 //
 //        SharedPreferences settings = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
 //        int highScore = settings.getInt("HIGH_SCORE", 0);
-
-//        highScoreLabel.setText(highScore);
 //
-//        if (score > highScore){
+//        highScoreLabel.setText(highScore);
+
+//        if (score > highScore) {
 //            highScoreLabel.setText(score);
 //            /*Save*/
 //            SharedPreferences.Editor editor = settings.edit();
 //            editor.putInt("HIGH_SCORE", score);
 //            editor.commit();
-//        }else{
-//            highScoreLabel.setText("High Score : "+highScore);
+//        } else {
+//            highScoreLabel.setText("High Score : " + highScore);
 //        }
 
     }

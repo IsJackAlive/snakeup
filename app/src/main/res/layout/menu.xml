@@ -12,7 +12,8 @@
             android:background="@android:color/holo_green_light"
             android:padding="6dp"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/relativeLayout">
+            android:id="@+id/relativeLayout" app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="1dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomBar">
 
         <TextView
                 android:text="Snake Upgraded"
@@ -30,7 +31,7 @@
     <LinearLayout
             android:id="@+id/bottomBar"
             android:layout_width="410dp"
-            android:layout_height="648dp"
+            android:layout_height="0dp"
             android:orientation="vertical"
             android:gravity="center"
             android:paddingBottom="10dp"

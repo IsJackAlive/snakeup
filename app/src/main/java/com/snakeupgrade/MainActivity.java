@@ -24,15 +24,6 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/*
-TODO:
-- punkt pojawia się w przeszkodzie - Już nie powinny, ale chyba się zdarza
-- przeszkody tworza sciany
-- zwiekszaj predkosc w trakcie gry
-- przyciski, grafika weza
- */
-
-
 public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
     public static final String GAME_PREFS = "prefs";
@@ -299,7 +290,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
                     SharedPreferences settings = getSharedPreferences("GAME_DATA", Context.MODE_PRIVATE);
                     int highScore = settings.getInt("HIGH_SCORE", 0);
 
-                    if (score > highScore){
+                    if (score > highScore) {
                         /*Save*/
                         highScore = score;
                         SharedPreferences.Editor editor = settings.edit();
@@ -309,7 +300,7 @@ public class MainActivity extends Menu implements SurfaceHolder.Callback {
 
                     // show game over alert
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Your Score = " + score +"\n"+"High Score = " + highScore);
+                    builder.setMessage("Your Score = " + score + "\n" + "High Score = " + highScore);
                     builder.setTitle("Game Over");
                     builder.setCancelable(false);
 

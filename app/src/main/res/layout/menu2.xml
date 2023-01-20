@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center" android:orientation="vertical">
+
+    <RelativeLayout
+            android:id="@+id/bg_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_green_light"
+            android:padding="6dp"
+            app:layout_constraintStart_toStartOf="parent" android:gravity="center">
+        <LinearLayout
+                android:id="@+id/bottomBar"
+                android:layout_width="314dp"
+                android:layout_height="410dp"
+                android:background="#003700B3"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp" android:layout_marginBottom="233dp">
+            <TextView
+                    android:text="@string/snake_upgraded"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:id="@+id/textView"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteY="47dp"
+                    tools:layout_editor_absoluteX="154dp" android:gravity="center"/>
+            <Button
+                    android:text="@string/play"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button"
+                    tools:layout_editor_absoluteY="158dp"
+                    tools:layout_editor_absoluteX="132dp"/>
+            <Button
+                    android:text="@string/high_score"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button3"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteY="369dp"
+                    tools:layout_editor_absoluteX="143dp"/>
+            <Button
+                    android:text="@string/about"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button4"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteY="471dp"
+                    tools:layout_editor_absoluteX="140dp"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
